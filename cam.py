@@ -6,10 +6,21 @@ import datetime
 
 cap = cv2.VideoCapture(0)
 
+face_cascade = cv2.CascadeClassifier(
+    cv2.data.haarcascades + "haarcascade_frontalface_default.xml")
+body_cascade = cv2.CascadeClassifier(
+    cv2.data.haarcascades + "haarcascade__fullbody.xml")
+
 while True:
     _, frame = cap.read()
     
-    cv2.imshow("Cmaera", frame)
+    gray = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
+    faces = face_cascade.detectMultiScale(gray, 1.2, 3)
+    
+    for (x, y, width, height) in faces:
+        cv2.rectangle(frame, (x, y), (x + width, y + height), (255, 0, 0), 3)
+    
+    cv2.imshow("Camera", frame)
     
     if cv2.waitKey(1) == ord('q'):
         break
